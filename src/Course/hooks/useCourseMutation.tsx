@@ -44,7 +44,25 @@ const useCourseMutation = () => {
     },
   });
 
-  return { mUpdate, mAdd, mDelete };
+  const mRestore = useMutation({
+    mutationFn: (_id: number) => {
+      return axios.patch(`/courses/${_id}/restore`);
+    },
+    onSuccess: () => {
+      // alert("Restore course successfully!");
+    },
+  });
+
+  const mForeceDelete = useMutation({
+    mutationFn: (_id: number) => {
+      return axios.delete(`/courses/${_id}/force`);
+    },
+    onSuccess: () => {
+      alert("Permanent delete course successfully!");
+    },
+  });
+
+  return { mUpdate, mAdd, mDelete, mRestore, mForeceDelete };
 };
 
 export default useCourseMutation;

@@ -1,9 +1,10 @@
 import ListPage from "../page/ListPage";
 import StorePage from "../page/StorePage";
+import TrashPage from "../page/TrashPage";
 import ViewPage from "../page/ViewPage";
 
 const Routes = {
-  path: "course",
+  path: "/course",
   children: [
     {
       index: true,
@@ -12,6 +13,10 @@ const Routes = {
     {
       path: "/course/store",
       element: <StorePage />,
+    },
+    {
+      path: "/course/trash",
+      element: <TrashPage />,
     },
     {
       path: "/course/:slug",

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CourseCard from "../../component/CourseCard";
 import useCourses from "../../hooks/useCourses";
@@ -6,8 +6,10 @@ import _ from "lodash";
 
 const ListPage = () => {
   const [items, setItems] = useState<any>();
+  const theme = useTheme();
   console.log("🚀 ~ file: index.tsx:9 ~ items:", items);
   const { data } = useCourses();
+  console.log("🚀 ~ file: index.tsx:11 ~ data:", data);
 
   useEffect(() => {
     if (data?.data?.data) {
@@ -24,7 +26,7 @@ const ListPage = () => {
     // /courses/{{this.slug}}
   };
   return (
-    <>
+    <Box sx={{ background: theme.palette.common.white }} p={2}>
       <Grid container spacing={2}>
         {items &&
           items?.map((v: any, i: number) => (
@@ -33,7 +35,7 @@ const ListPage = () => {
             </Grid>
           ))}
       </Grid>
-    </>
+    </Box>
   );
 };
 

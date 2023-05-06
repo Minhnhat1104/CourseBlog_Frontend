@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import useCourses from "../../hooks/useCourses";
 import _ from "lodash";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
 import {
   Box,
   Button,
+  Grid,
   IconButton,
   Stack,
   TextField,
@@ -21,23 +22,26 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import UpdateModal from "../../container/UpdateModal";
 import AddModal from "../../container/AddModal";
 import { SET_TIMEOUT } from "../../../base/constants";
+import useDeletedCourses from "../../hooks/useDeletedCourses";
+import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
 
-const StorePage = () => {
+const TrashPage = () => {
   const [items, setItems] = useState<any>([]);
   const [selectedIds, setSelectedIds] = useState([]);
   console.log("🚀 ~ file: index.tsx:27 ~ selectedIds:", selectedIds);
   const [updateItem, setUpdateItem] = useState<any>(undefined);
   const [showUpdate, setShowUpdate] = React.useState(false);
   const [showAdd, setShowAdd] = React.useState(false);
+  const handleClose = () => setShowUpdate(false);
   const theme = useTheme();
 
-  const { data, refetch } = useCourses();
-  const { mDelete } = useCourseMutation();
+  const { data, refetch } = useDeletedCourses();
+  const { mForeceDelete, mRestore } = useCourseMutation();
 
   // ========== init data==============
   useEffect(() => {
-    if (data?.data?.data) {
-      const newItems = data?.data?.data;
+    if (data?.data?.data?.courses) {
+      const newItems = data?.data?.data?.courses;
       if (!_.isEqual(newItems, items)) {
         setItems(newItems);
       }
@@ -52,14 +56,9 @@ const StorePage = () => {
 
   // ========== handle Table ==========
 
-  const handleClickUpdate = (item: any) => {
-    setShowUpdate(true);
-    setUpdateItem(item);
-  };
-
-  const handleDeleteCourse = (_id: number) => {
+  const handleClickRestore = (_id: number) => {
     if (_id) {
-      mDelete.mutate(_id, {
+      mRestore.mutate(_id, {
         onSuccess: () => {
           setTimeout(() => {
             refetch && refetch();
@@ -69,37 +68,114 @@ const StorePage = () => {
     }
   };
 
-  const handleDeleteAll = () => {
+  const handleRestoreAll = () => {
     selectedIds.forEach((_id: number) => {
-      mDelete.mutate(_id);
+      mRestore.mutate(_id);
+    });
+
+    refetch && refetch();
+  };
+
+  const handleForceDeleteCourse = (_id: number) => {
+    if (_id) {
+      mForeceDelete.mutate(_id, {
+        onSuccess: () => {
+          setTimeout(() => {
+            refetch && refetch();
+          }, SET_TIMEOUT);
+        },
+      });
+    }
+  };
+
+  const handleForceDeleteAll = () => {
+    selectedIds.forEach((_id: number) => {
+      mForeceDelete.mutate(_id);
     });
 
     refetch && refetch();
   };
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "name", width: 400, flex: 1 },
-    { field: "description", headerName: "description", width: 300 },
-    { field: "level", headerName: "level", width: 100 },
-    { field: "videoid", headerName: "videoid", width: 120 },
     {
-      field: "createdAt",
-      headerName: "createdAt",
+      field: "name",
+      headerName: "Name",
+      width: 400,
+      flex: 1,
+      renderHeader: (params: GridColumnHeaderParams) => {
+        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
+        return (
+          <Typography fontSize={"0.9rem"} fontWeight={600}>
+            {params?.colDef?.headerName}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "description",
+      headerName: "Description",
+      width: 300,
+      renderHeader: (params: GridColumnHeaderParams) => {
+        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
+        return (
+          <Typography fontSize={"0.9rem"} fontWeight={600}>
+            {params?.colDef?.headerName}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "level",
+      headerName: "Level",
+      width: 100,
+      renderHeader: (params: GridColumnHeaderParams) => {
+        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
+        return (
+          <Typography fontSize={"0.9rem"} fontWeight={600}>
+            {params?.colDef?.headerName}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "videoid",
+      headerName: "Video Id",
+      width: 120,
+      renderHeader: (params: GridColumnHeaderParams) => {
+        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
+        return (
+          <Typography fontSize={"0.9rem"} fontWeight={600}>
+            {params?.colDef?.headerName}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "deletedAt",
+      headerName: "Deleted at",
       width: 140,
       valueGetter: (params) => {
         const value =
-          new Date(params.row.createdAt).toLocaleDateString("en-GB", {
+          new Date(params.row.deletedAt).toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
           }) +
           " " +
-          new Date(params.row.createdAt).toLocaleTimeString("en-GB", {
+          new Date(params.row.deletedAt).toLocaleTimeString("en-GB", {
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
           });
         return value;
+      },
+      renderHeader: (params: GridColumnHeaderParams) => {
+        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
+        return (
+          <Typography fontSize={"0.9rem"} fontWeight={600}>
+            {params?.colDef?.headerName}
+          </Typography>
+        );
       },
     },
     {
@@ -113,10 +189,10 @@ const StorePage = () => {
             color="primary"
             onClick={(e: any) => {
               e.stopPropagation();
-              handleClickUpdate(params.row);
+              handleClickRestore(params.row?._id || 0);
             }}
           >
-            <EditOutlinedIcon fontSize="small" />
+            <RestoreOutlinedIcon fontSize="small" />
           </IconButton>
         );
       },
@@ -132,7 +208,7 @@ const StorePage = () => {
             color="error"
             onClick={(e: any) => {
               e.stopPropagation();
-              handleDeleteCourse(params.row?._id || "");
+              handleForceDeleteCourse(params.row?._id || 0);
             }}
           >
             <DeleteOutlineOutlinedIcon fontSize="small" />
@@ -153,14 +229,6 @@ const StorePage = () => {
           justifyContent={"flex-end"}
         >
           <Stack direction={"row"} alignItems={"center"} spacing={1}>
-            <Button
-              size="small"
-              startIcon={<AddOutlinedIcon />}
-              variant="contained"
-              onClick={() => setShowAdd(true)}
-            >
-              Add
-            </Button>
             <IconButton size="small" onClick={() => refetch()}>
               <RefreshOutlinedIcon />
             </IconButton>
@@ -168,7 +236,7 @@ const StorePage = () => {
         </Stack>
 
         <Typography fontSize={"2.0rem"} textAlign={"center"}>
-          Course Studio
+          Course Trash
         </Typography>
 
         {selectedIds?.length > 0 && (
@@ -176,10 +244,18 @@ const StorePage = () => {
             <Button
               size="small"
               variant="outlined"
-              color="error"
-              onClick={() => handleDeleteAll()}
+              color="primary"
+              onClick={() => handleRestoreAll()}
             >
-              Delete All
+              Restore All
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              color="error"
+              onClick={() => handleForceDeleteAll()}
+            >
+              Permanent Delete All
             </Button>
           </Stack>
         )}
@@ -232,4 +308,4 @@ const StorePage = () => {
   );
 };
 
-export default StorePage;
+export default TrashPage;

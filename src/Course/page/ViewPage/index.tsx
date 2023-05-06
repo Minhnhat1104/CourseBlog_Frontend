@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useCourse from "../../hooks/useCourse";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import _ from "lodash";
 
 const ViewPage = () => {
   const param = useParams();
   const [course, setCourse] = useState<any>(undefined);
   const slug = param?.slug;
+  const theme = useTheme();
 
   const { data } = useCourse(slug || "");
 
@@ -22,10 +23,13 @@ const ViewPage = () => {
     }
   }, [data]);
 
-  console.log("🚀 ~ file: index.tsx:10 ~ data:", data);
-
   return (
-    <>
+    <Box
+      sx={{ background: theme.palette.common.white }}
+      p={2}
+      width={"fit-content"}
+      margin="auto"
+    >
       {course && (
         <Box display={"flex"} width={"100%"}>
           <Stack spacing={1} width={"fit-content"} margin={"auto"}>
@@ -45,7 +49,7 @@ const ViewPage = () => {
           </Stack>
         </Box>
       )}
-    </>
+    </Box>
   );
 };
 

@@ -3,13 +3,12 @@ import axios from "../../base/components/axios";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../config/queryKeys";
 
-const useCourse = (sourceId: string) => {
+const useDeletedCourses = () => {
   const mPost = useQuery({
-    queryKey: [queryKeys.course, sourceId],
-    queryFn: () => axios.get(`/courses/${sourceId}`),
-    enabled: sourceId !== "",
+    queryKey: [queryKeys.deleted_courses],
+    queryFn: () => axios.get("/me/trash/courses"),
   });
   return mPost;
 };
 
-export default useCourse;
+export default useDeletedCourses;
