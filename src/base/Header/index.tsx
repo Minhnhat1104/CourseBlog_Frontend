@@ -184,26 +184,30 @@ const Header = () => {
           <Divider />
           <MenuItem onClick={handleClickLogo}>Xem khóa học</MenuItem>
 
-          <MenuItem
-            onClick={() => {
-              navigate("/course/store", {
-                replace: true,
-              });
-              handleClose();
-            }}
-          >
-            Quản lý khóa học
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              navigate("/course/trash", {
-                replace: true,
-              });
-              handleClose();
-            }}
-          >
-            Thùng rác
-          </MenuItem>
+          {user?.isAdmin && (
+            <MenuItem
+              onClick={() => {
+                navigate("/course/store", {
+                  replace: true,
+                });
+                handleClose();
+              }}
+            >
+              Quản lý khóa học
+            </MenuItem>
+          )}
+          {user?.isAdmin && (
+            <MenuItem
+              onClick={() => {
+                navigate("/course/trash", {
+                  replace: true,
+                });
+                handleClose();
+              }}
+            >
+              Thùng rác
+            </MenuItem>
+          )}
           <Divider />
           <MenuItem onClick={handleLogOut}>Đăng xuất</MenuItem>
         </MenuList>

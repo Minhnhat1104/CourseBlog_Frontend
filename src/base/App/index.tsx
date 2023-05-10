@@ -53,7 +53,6 @@ function App() {
   // Get user from local storage on mount
   useEffect(() => {
     const userJson = localStorage.getItem("user");
-    console.log("🚀 ~ file: index.tsx:37 ~ userJson:", userJson);
     if (userJson) {
       const storedUser = JSON.parse(userJson);
       setUser(storedUser);
@@ -68,17 +67,18 @@ function App() {
         <Header />
         <Box
           p={4}
-          minHeight={"calc(100vh - 86px)"}
           sx={{
             backgroundImage: `url(${homeImage})`,
-            // backgroundSize: "cover",
-            // backgroundPosition: "center",
-            // height: 200,
+            overflowY: "scroll",
+            height: "calc(100vh - 86px)",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+            scrollbarWidth: "none" /* Firefox */,
+            "-ms-overflow-style": "none" /* Edge */,
           }}
         >
-          {/* <Box sx={{ background: theme.palette.common.white }} p={2}> */}
           {routes}
-          {/* </Box> */}
         </Box>
         <Footer />
       </Box>
