@@ -59,7 +59,10 @@ const StorePage = () => {
 
   const handleDeleteCourse = (_id: number) => {
     if (_id) {
-      mDelete.mutate(_id, {
+      const params = {
+        ids: [_id],
+      };
+      mDelete.mutate(params, {
         onSuccess: () => {
           setTimeout(() => {
             refetch && refetch();
@@ -70,9 +73,10 @@ const StorePage = () => {
   };
 
   const handleDeleteAll = () => {
-    selectedIds.forEach((_id: number) => {
-      mDelete.mutate(_id);
-    });
+    const params = {
+      ids: selectedIds,
+    };
+    mDelete.mutate(params);
 
     refetch && refetch();
   };

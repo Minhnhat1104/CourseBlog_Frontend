@@ -36,8 +36,8 @@ const useCourseMutation = () => {
   });
 
   const mDelete = useMutation({
-    mutationFn: (_id: number) => {
-      return axios.delete(`/courses/${_id}`);
+    mutationFn: (params: any) => {
+      return axios.delete(`/courses/destroy`, { data: params || {} });
     },
     onSuccess: () => {
       alert("Delete course successfully!");
@@ -45,17 +45,17 @@ const useCourseMutation = () => {
   });
 
   const mRestore = useMutation({
-    mutationFn: (_id: number) => {
-      return axios.patch(`/courses/${_id}/restore`);
+    mutationFn: (params: any) => {
+      return axios.patch(`/courses/restore`, { data: params || {} });
     },
     onSuccess: () => {
-      // alert("Restore course successfully!");
+      alert("Restore course successfully!");
     },
   });
 
   const mForeceDelete = useMutation({
-    mutationFn: (_id: number) => {
-      return axios.delete(`/courses/${_id}/force`);
+    mutationFn: (params: any) => {
+      return axios.delete(`/courses/destroy/force`, { data: params || {} });
     },
     onSuccess: () => {
       alert("Permanent delete course successfully!");

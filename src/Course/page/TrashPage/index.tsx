@@ -58,7 +58,10 @@ const TrashPage = () => {
 
   const handleClickRestore = (_id: number) => {
     if (_id) {
-      mRestore.mutate(_id, {
+      const params = {
+        ids: [_id],
+      };
+      mRestore.mutate(params, {
         onSuccess: () => {
           setTimeout(() => {
             refetch && refetch();
@@ -69,16 +72,24 @@ const TrashPage = () => {
   };
 
   const handleRestoreAll = () => {
-    selectedIds.forEach((_id: number) => {
-      mRestore.mutate(_id);
+    const params = {
+      ids: selectedIds,
+    };
+    mRestore.mutate(params, {
+      onSuccess: () => {
+        setTimeout(() => {
+          refetch && refetch();
+        }, SET_TIMEOUT);
+      },
     });
-
-    refetch && refetch();
   };
 
   const handleForceDeleteCourse = (_id: number) => {
     if (_id) {
-      mForeceDelete.mutate(_id, {
+      const params = {
+        ids: [_id],
+      };
+      mForeceDelete.mutate(params, {
         onSuccess: () => {
           setTimeout(() => {
             refetch && refetch();
@@ -89,11 +100,16 @@ const TrashPage = () => {
   };
 
   const handleForceDeleteAll = () => {
-    selectedIds.forEach((_id: number) => {
-      mForeceDelete.mutate(_id);
+    const params = {
+      ids: selectedIds,
+    };
+    mForeceDelete.mutate(params, {
+      onSuccess: () => {
+        setTimeout(() => {
+          refetch && refetch();
+        }, SET_TIMEOUT);
+      },
     });
-
-    refetch && refetch();
   };
 
   const columns: GridColDef[] = [
@@ -103,7 +119,6 @@ const TrashPage = () => {
       width: 400,
       flex: 1,
       renderHeader: (params: GridColumnHeaderParams) => {
-        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
         return (
           <Typography fontSize={"0.9rem"} fontWeight={600}>
             {params?.colDef?.headerName}
@@ -116,7 +131,6 @@ const TrashPage = () => {
       headerName: "Description",
       width: 300,
       renderHeader: (params: GridColumnHeaderParams) => {
-        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
         return (
           <Typography fontSize={"0.9rem"} fontWeight={600}>
             {params?.colDef?.headerName}
@@ -129,7 +143,6 @@ const TrashPage = () => {
       headerName: "Level",
       width: 100,
       renderHeader: (params: GridColumnHeaderParams) => {
-        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
         return (
           <Typography fontSize={"0.9rem"} fontWeight={600}>
             {params?.colDef?.headerName}
@@ -142,7 +155,6 @@ const TrashPage = () => {
       headerName: "Video Id",
       width: 120,
       renderHeader: (params: GridColumnHeaderParams) => {
-        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
         return (
           <Typography fontSize={"0.9rem"} fontWeight={600}>
             {params?.colDef?.headerName}
@@ -170,7 +182,6 @@ const TrashPage = () => {
         return value;
       },
       renderHeader: (params: GridColumnHeaderParams) => {
-        console.log("🚀 ~ file: index.tsx:96 ~ params:", params);
         return (
           <Typography fontSize={"0.9rem"} fontWeight={600}>
             {params?.colDef?.headerName}
