@@ -53,6 +53,8 @@ const AddModal = (props: AddModalProps) => {
         }, SET_TIMEOUT);
       },
     });
+
+    onClose && onClose();
   };
 
   const mainFields = useMemo(() => {

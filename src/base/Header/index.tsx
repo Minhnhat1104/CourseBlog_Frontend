@@ -53,6 +53,12 @@ const Header = () => {
     });
   };
 
+  const handleCickManageUser = () => {
+    navigate("/auth/user-store", {
+      replace: true,
+    });
+  };
+
   const handleLogOut = () => {
     setUser(null);
     localStorage.removeItem("user");
@@ -170,6 +176,11 @@ const Header = () => {
           // onKeyDown={handleListKeyDown}
         >
           <MenuItem onClick={handleClickUserInfo}>Thông tin cá nhân</MenuItem>
+          {user?.isAdmin && (
+            <MenuItem onClick={handleCickManageUser}>
+              Quản lý người dùng
+            </MenuItem>
+          )}
           <Divider />
           <MenuItem onClick={handleClickLogo}>Xem khóa học</MenuItem>
 

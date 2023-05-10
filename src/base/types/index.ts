@@ -2,7 +2,7 @@ export interface User {
   _id: string;
   name: string;
   username: string;
-  isadmin: boolean;
+  isAdmin: boolean;
   phoneNumber: string;
   email?: string;
 }

@@ -11,6 +11,7 @@ const useUserMutation = () => {
         username: data?.username,
         password: data?.password,
         phoneNumber: data?.phoneNumber,
+        isAdmin: data?.isAdmin || false,
       };
 
       return axios.post(`/auth/store`, param);
@@ -37,7 +38,19 @@ const useUserMutation = () => {
     },
   });
 
-  return { mAdd, mUpdate };
+  const mDelete = useMutation({
+    mutationFn: (ids: any) => {
+      const params: any = {
+        ids: ids,
+      };
+      return axios.delete(`/auth/destroy`, { data: params });
+    },
+    onSuccess: () => {
+      alert("Delete user successfully!");
+    },
+  });
+
+  return { mAdd, mUpdate, mDelete };
 };
 
 export default useUserMutation;

@@ -1,81 +1,65 @@
 import MiModal from "../../../base/components/MiModal";
-import React, { useEffect, useMemo, useState } from "react";
-import useCourses from "../../hooks/useCourses";
+import React, { useMemo } from "react";
 import _ from "lodash";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import {
   Box,
   Button,
-  IconButton,
   Stack,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useForm } from "react-hook-form";
-import useCourseMutation from "../../hooks/useCourseMutation";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
+import useUserMutation from "../../hooks/useUserMutation";
 import { SET_TIMEOUT } from "../../../base/constants";
 
-interface UpdateModalProps {
+interface AddModalProps {
   open: boolean;
   onClose: () => void;
-  updateItem: any;
   refetch: () => void;
 }
 
-const UpdateModal = (props: UpdateModalProps) => {
-  const { open, onClose, updateItem, refetch } = props;
+const AddModal = (props: AddModalProps) => {
+  const { open, onClose, refetch } = props;
   // ============ handle update modal ================
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm({
     defaultValues: {
-      _id: 0,
-      name: "",
-      description: "",
-      videoid: "",
-      level: "",
+      email: "",
+      username: "",
+      password: "",
+      phoneNumber: "",
+      isAdmin: false,
     },
   });
 
-  useEffect(() => {
-    if (updateItem) {
-      setValue("_id", updateItem?._id || "");
-      setValue("name", updateItem?.name || "");
-      setValue("description", updateItem?.description || "");
-      setValue("videoid", updateItem?.videoid || "");
-      setValue("level", updateItem?.level || "");
-    }
-  }, [updateItem, setValue]);
-
-  const { mUpdate } = useCourseMutation();
+  const { mAdd } = useUserMutation();
 
   const onSubmit = (data: any) => {
-    mUpdate.mutate(data, {
+    mAdd.mutate(data, {
       onSuccess: () => {
         setTimeout(() => {
           refetch && refetch();
         }, SET_TIMEOUT);
-
-        onClose && onClose();
       },
     });
+
+    onClose && onClose();
   };
 
   const mainFields = useMemo(() => {
     return (
       <Stack spacing={1}>
         <Box>
-          <Typography variant="subtitle2">Name</Typography>
+          <Typography variant="subtitle2">Email</Typography>
           <TextField
             size="small"
-            {...register("name")}
+            {...register("email")}
             variant="outlined"
             fullWidth
             multiline
@@ -83,10 +67,10 @@ const UpdateModal = (props: UpdateModalProps) => {
           />
         </Box>
         <Box>
-          <Typography variant="subtitle2">Description</Typography>
+          <Typography variant="subtitle2">Username</Typography>
           <TextField
             size="small"
-            {...register("description")}
+            {...register("username")}
             variant="outlined"
             fullWidth
             multiline
@@ -94,26 +78,33 @@ const UpdateModal = (props: UpdateModalProps) => {
           />
         </Box>
         <Box>
-          <Typography variant="subtitle2">Video ID</Typography>
+          <Typography variant="subtitle2">Password</Typography>
           <TextField
             size="small"
-            {...register("videoid")}
+            {...register("password")}
             variant="outlined"
             fullWidth
           />
         </Box>
         <Box>
-          <Typography variant="subtitle2">Level</Typography>
+          <Typography variant="subtitle2">Phone number</Typography>
           <TextField
             size="small"
-            {...register("level")}
+            {...register("phoneNumber")}
             variant="outlined"
             fullWidth
           />
         </Box>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="subtitle2">Is admin</Typography>
+          <Switch
+            inputProps={{ "aria-label": "controlled" }}
+            {...register("isAdmin")}
+          />
+        </Stack>
       </Stack>
     );
-  }, [updateItem]);
+  }, []);
 
   const updateFooter = useMemo(() => {
     return (
@@ -144,7 +135,7 @@ const UpdateModal = (props: UpdateModalProps) => {
 
   return (
     <MiModal
-      title="Update Course"
+      title="Create new user"
       open={open}
       onClose={onClose}
       Footer={updateFooter}
@@ -154,4 +145,4 @@ const UpdateModal = (props: UpdateModalProps) => {
   );
 };
 
-export default UpdateModal;
+export default AddModal;
