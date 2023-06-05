@@ -32,7 +32,12 @@ const ViewPage = () => {
     >
       {course && (
         <Box display={"flex"} width={"100%"}>
-          <Stack spacing={1} width={"fit-content"} margin={"auto"}>
+          <Stack
+            spacing={1}
+            width={"fit-content"}
+            margin={"auto"}
+            alignItems="center"
+          >
             <Typography fontWeight={600} fontSize={"1.2rem"}>
               {course?.name}
             </Typography>
