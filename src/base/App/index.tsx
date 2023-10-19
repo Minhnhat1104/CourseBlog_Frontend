@@ -75,7 +75,7 @@ function App() {
               display: "none",
             },
             scrollbarWidth: "none" /* Firefox */,
-            "-ms-overflow-style": "none" /* Edge */,
+            msOverflowStyle: "none" /* Edge */,
           }}
         >
           {routes}

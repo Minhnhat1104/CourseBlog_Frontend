@@ -62,8 +62,6 @@ const AddModal = (props: AddModalProps) => {
             {...register("email")}
             variant="outlined"
             fullWidth
-            multiline
-            // rows={3}
           />
         </Box>
         <Box>
@@ -73,8 +71,6 @@ const AddModal = (props: AddModalProps) => {
             {...register("username")}
             variant="outlined"
             fullWidth
-            multiline
-            // rows={3}
           />
         </Box>
         <Box>

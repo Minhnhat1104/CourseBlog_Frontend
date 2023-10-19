@@ -78,8 +78,6 @@ const UpdateModal = (props: UpdateModalProps) => {
             {...register("name")}
             variant="outlined"
             fullWidth
-            multiline
-            // rows={3}
           />
         </Box>
         <Box>
@@ -90,7 +88,7 @@ const UpdateModal = (props: UpdateModalProps) => {
             variant="outlined"
             fullWidth
             multiline
-            // rows={3}
+            rows={3}
           />
         </Box>
         <Box>
