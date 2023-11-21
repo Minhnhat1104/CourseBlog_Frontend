@@ -1,17 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import {
-  Avatar,
   Box,
   Button,
-  ClickAwayListener,
   Divider,
-  Grow,
   MenuItem,
   MenuList,
-  Paper,
   Popover,
-  Popper,
   Stack,
   Typography,
   useTheme,
@@ -27,6 +22,12 @@ const Header = () => {
 
   const theme = useTheme();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/course");
+    }
+  }, [user]);
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
@@ -217,3 +218,25 @@ const Header = () => {
 };
 
 export default Header;
+
+// 5.1 18
+// 5.2 19
+// 5.3 19
+// 5.4 20
+// 5.5 21
+// 5.6 22
+// 5.7 22
+
+// 5.4 Usẻ story 35
+// 5.5 MVP 35
+// 5.6 Product roadmap 36
+// 6.1 51
+// 6.3 52
+// 6.4 6.4 53
+// 6.6 54
+// 6.7 6.8 55
+// 6.9 56
+// 7.1 57
+// 7.2 7.3 60
+// 7.4 7.5 7.6 61
+// 8.1 8.2 65

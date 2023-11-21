@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import logo from "./logo.svg";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button, Stack, useTheme } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
 import { Navigate, useRoutes } from "react-router-dom";
@@ -63,7 +63,7 @@ function App() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Box minHeight={"100vh"}>
+      <Stack height={"100vh"}>
         <Header />
         <Box
           p={4}
@@ -74,6 +74,7 @@ function App() {
             "&::-webkit-scrollbar": {
               display: "none",
             },
+            flex: 1,
             scrollbarWidth: "none" /* Firefox */,
             msOverflowStyle: "none" /* Edge */,
           }}
@@ -81,7 +82,7 @@ function App() {
           {routes}
         </Box>
         <Footer />
-      </Box>
+      </Stack>
     </UserContext.Provider>
   );
 }
